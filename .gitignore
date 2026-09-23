@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Local environment / secret files
+.env
+*.local
+
+# Postman local state
+postman/*.postman_globals.json
+
+# Test output
+reports/
+results/

@@ -1,0 +1,666 @@
+{
+  "info": {
+    "name": "Shop API — QA Portfolio",
+    "_postman_id": "0b8d2d5a-6a36-4d3c-9d1b-qa0000000001",
+    "description": "Portfolio demo collection for API testing with Postman. Uses a placeholder base URL and fictional test data.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.example.com"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Authorization",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@mail.com\",\n  \"password\": \"12345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Success is true\", function () {",
+                  "    pm.expect(json.success).to.equal(true);",
+                  "});",
+                  "",
+                  "pm.test(\"Token exists\", function () {",
+                  "    pm.expect(json).to.have.property(\"token\");",
+                  "});",
+                  "",
+                  "pm.environment.set(\"token\", json.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "profile"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID exists\", function () {",
+                  "    pm.expect(json).to.have.property(\"id\");",
+                  "});",
+                  "",
+                  "pm.test(\"Name is string\", function () {",
+                  "    pm.expect(json.name).to.be.a(\"string\");",
+                  "});",
+                  "",
+                  "pm.test(\"Email is correct\", function () {",
+                  "    pm.expect(json.email).to.equal(\"test@mail.com\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 Products",
+      "item": [
+        {
+          "name": "Get Products — Default",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Products exist\", function () {",
+                  "    pm.expect(json).to.have.property(\"products\");",
+                  "});",
+                  "",
+                  "pm.test(\"Products is an array\", function () {",
+                  "    pm.expect(json.products).to.be.an(\"array\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Products — limit=50",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Limit equals 50\", function () {",
+                  "    pm.expect(json.limit).to.equal(50);",
+                  "});",
+                  "",
+                  "pm.test(\"Products exist\", function () {",
+                  "    pm.expect(json).to.have.property(\"products\");",
+                  "});",
+                  "",
+                  "pm.test(\"Products is an array\", function () {",
+                  "    pm.expect(json.products).to.be.an(\"array\");",
+                  "});",
+                  "",
+                  "pm.test(\"Products count is 50\", function () {",
+                  "    pm.expect(json.products).to.have.lengthOf(50);",
+                  "});",
+                  "",
+                  "pm.test(\"Every product has id\", function () {",
+                  "    json.products.forEach(function(product) {",
+                  "        pm.expect(product).to.have.property(\"id\");",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test(\"Every product has valid name\", function () {",
+                  "    json.products.forEach(function(product) {",
+                  "        pm.expect(product).to.have.property(\"name\");",
+                  "        pm.expect(product.name).to.be.a(\"string\");",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test(\"Every product has price greater than 0\", function () {",
+                  "    json.products.forEach(function(product) {",
+                  "        pm.expect(product.price).to.be.above(0);",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test(\"Every product available is boolean\", function () {",
+                  "    json.products.forEach(function(product) {",
+                  "        pm.expect(product.available).to.be.a(\"boolean\");",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Products — limit=101",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "101"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Success is false\", function () {",
+                  "    pm.expect(json.success).to.equal(false);",
+                  "});",
+                  "",
+                  "pm.test(\"Error exists\", function () {",
+                  "    pm.expect(json).to.have.property(\"error\");",
+                  "});",
+                  "",
+                  "pm.test(\"Error message is correct\", function () {",
+                  "    pm.expect(json.error).to.equal(\"Limit must be between 1 and 100\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/123",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "123"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID is 123\", function () {",
+                  "    pm.expect(json.id).to.equal(123);",
+                  "});",
+                  "",
+                  "pm.test(\"Name exists\", function () {",
+                  "    pm.expect(json).to.have.property(\"name\");",
+                  "});",
+                  "",
+                  "pm.test(\"Price is greater than 0\", function () {",
+                  "    pm.expect(json.price).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Available is boolean\", function () {",
+                  "    pm.expect(json.available).to.be.a(\"boolean\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Product — Invalid ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "999999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Invalid product ID returns 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 Orders",
+      "item": [
+        {
+          "name": "Get Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Orders exist\", function () {",
+                  "    pm.expect(json).to.have.property(\"orders\");",
+                  "});",
+                  "",
+                  "pm.test(\"Orders is an array\", function () {",
+                  "    pm.expect(json.orders).to.be.an(\"array\");",
+                  "});",
+                  "",
+                  "pm.test(\"Every order has ID\", function () {",
+                  "    json.orders.forEach(function(order) {",
+                  "        pm.expect(order).to.have.property(\"id\");",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test(\"Every order status is string\", function () {",
+                  "    json.orders.forEach(function(order) {",
+                  "        pm.expect(order.status).to.be.a(\"string\");",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test(\"Every order total is above 0\", function () {",
+                  "    json.orders.forEach(function(order) {",
+                  "        pm.expect(order.total).to.be.above(0);",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test(\"Authorization header exists\", function () {",
+                  "    pm.expect(pm.request.headers.has(\"Authorization\")).to.equal(true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 Users",
+      "item": [
+        {
+          "name": "Create User — Valid",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Egor\",\n  \"age\": 30,\n  \"email\": \"test@mail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Success is true\", function () {",
+                  "    pm.expect(json.success).to.equal(true);",
+                  "});",
+                  "",
+                  "pm.test(\"User ID exists\", function () {",
+                  "    pm.expect(json.user).to.have.property(\"id\");",
+                  "});",
+                  "",
+                  "pm.environment.set(\"userId\", json.user.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create User — Invalid Age",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Egor\",\n  \"age\": 17,\n  \"email\": \"test@mail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Success is false\", function () {",
+                  "    pm.expect(json.success).to.equal(false);",
+                  "});",
+                  "",
+                  "pm.test(\"Error exists\", function () {",
+                  "    pm.expect(json).to.have.property(\"error\");",
+                  "});",
+                  "",
+                  "pm.test(\"User is not created\", function () {",
+                  "    pm.expect(json).to.not.have.property(\"user\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Egor Updated\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test(\"Status Code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Name is updated\", function () {",
+                  "    pm.expect(json.name).to.equal(\"Egor Updated\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Delete request is accepted\", function () {",
+                  "    pm.expect([200, 204]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
