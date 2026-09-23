@@ -27,6 +27,7 @@ This project demonstrates how a QA engineer can analyze API requirements, design
 - Validation of JSON objects and arrays
 - Collection Runner concepts
 - Data-driven testing concepts
+- SQL for database verification
 - Bug reporting and defect analysis
 
 ## Repository Structure
@@ -37,6 +38,8 @@ shop-api-qa-portfolio/
 ├── TEST_CASES.md
 ├── BUG_REPORTS.md
 ├── .gitignore
+├── sql/
+│   └── qa_queries.sql
 └── postman/
     ├── Shop-API.postman_collection.json
     └── Shop-API.postman_environment.json
@@ -103,6 +106,17 @@ Shop API
 - `status` is a string
 - `total > 0`
 - Authorization header presence
+
+### SQL / Database Verification
+
+- Basic SELECT queries
+- Filtering with WHERE, AND, and OR
+- Sorting with ORDER BY
+- Counting records with COUNT(*)
+- Pattern matching with LIKE
+- NULL checks with IS NULL / IS NOT NULL
+- INNER JOIN and LEFT JOIN
+- Verification of created, updated, and deleted user records
 
 ### Users
 
@@ -179,7 +193,6 @@ The project applies several test design techniques:
 
 Planned additions to the portfolio:
 
-- SQL validation examples
 - Git/GitHub workflow documentation
 - More advanced Postman scripting
 - Data-driven API tests
